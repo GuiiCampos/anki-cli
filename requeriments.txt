@@ -1,0 +1,2 @@
+deck=English
+model=Basic
