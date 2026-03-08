@@ -36,6 +36,9 @@ def main():
             return
         cli.edit(int(sys.argv[2]))
 
+    elif command == "open":
+        cli.open_queue()
+
     elif command == "clear":
         cli.clear()
 

@@ -1,3 +1,6 @@
+import os
+from .paths import QUEUE_FILE
+
 from .queue_manager import add_line, get_queue, remove_item, clear_queue
 from .queue_manager import update_item
 
@@ -63,6 +66,15 @@ def edit(index):
 
     if success:
         print("Item updated.")
+
+
+def open_queue():
+    path = str(QUEUE_FILE)
+
+    if os.name == "nt":
+        os.startfile(path)
+    else:
+        os.system(f"xdg-open {path}")
 
 
 def clear():
