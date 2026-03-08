@@ -30,6 +30,12 @@ def main():
     elif command == "remove":
         cli.remove(int(sys.argv[2]))
 
+    elif command == "edit":
+        if len(sys.argv) < 3:
+            print("Usage: edit INDEX")
+            return
+        cli.edit(int(sys.argv[2]))
+
     elif command == "clear":
         cli.clear()
 

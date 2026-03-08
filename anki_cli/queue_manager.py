@@ -30,5 +30,18 @@ def remove_item(index):
     print(f"Removed: {removed}")
 
 
+def update_item(index, new_line):
+    lines = get_queue()
+
+    if index < 1 or index > len(lines):
+        print("Invalid index")
+        return False
+
+    lines[index - 1] = new_line
+    save_queue(lines)
+
+    return True
+
+
 def clear_queue():
     save_queue([])
