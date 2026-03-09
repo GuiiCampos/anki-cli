@@ -1,8 +1,9 @@
 import os
 from .paths import QUEUE_FILE
 
-from .queue_manager import add_line, get_queue, remove_item, clear_queue
-from .queue_manager import update_item
+from datetime import datetime
+from .paths import HISTORY_FILE
+from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
 
 def add(word):
     add_line(word)
@@ -80,3 +81,67 @@ def open_queue():
 def clear():
     clear_queue()
     print("Queue cleared")
+
+
+## Sobre a lógica envolvendo o process ->
+
+def parse_line(line):
+    parts = line.split("|")
+
+    while len(parts) < 4:
+        parts.append("")
+
+    word, translation, card_type, example = parts
+
+    return word, translation, card_type, example
+
+
+def complete_fields(word, translation, card_type, example):
+
+    if not translation:
+        translation = input(f"Translation for '{word}': ").strip()
+
+    if not card_type:
+        card_type = input("Type (t/c): ").strip()
+
+    if card_type == "c" and not example:
+        example = input("Example sentence: ").strip()
+
+    return word, translation, card_type, example
+
+
+def save_history(word, translation, card_type, example):
+    date = datetime.now().strftime("%Y-%m-%d")
+
+    line = f"{date}|{word}|{translation}|{card_type}|{example}"
+
+    with open(HISTORY_FILE, "a", encoding="utf-8") as f:
+        f.write(line + "\n")
+
+
+def process():
+    queue = get_queue()
+
+    if not queue:
+        print("Queue is empty.")
+        return
+
+    print(f"Processing {len(queue)} items\n")
+
+    for line in queue:
+
+        word, translation, card_type, example = parse_line(line)
+
+        print(f"\nWord: {word}")
+
+        word, translation, card_type, example = complete_fields(
+            word, translation, card_type, example
+        )
+
+        save_history(word, translation, card_type, example)
+
+        print("Saved.")
+
+    clear_queue()
+
+    print("\nQueue cleared.")

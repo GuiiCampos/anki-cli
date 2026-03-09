@@ -38,6 +38,9 @@ def main():
 
     elif command == "open":
         cli.open_queue()
+    
+    elif command == "process":
+        cli.process()
 
     elif command == "clear":
         cli.clear()

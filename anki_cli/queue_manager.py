@@ -8,7 +8,9 @@ def add_line(line):
 
 def get_queue():
     with open(QUEUE_FILE, "r", encoding="utf-8") as f:
-        return [line.strip() for line in f.readlines()]
+        lines = [line.strip() for line in f.readlines()]
+
+    return [l for l in lines if l]
 
 
 def save_queue(lines):
