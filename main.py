@@ -3,7 +3,6 @@ import sys
 from anki_cli.paths import ensure_files
 from anki_cli import cli
 
-
 def main():
     ensure_files()
 
@@ -31,14 +30,17 @@ def main():
             return
         cli.edit(int(sys.argv[2]))
 
-    elif command == "open":
-        cli.open_queue()
-    
     elif command == "process":
         cli.process()
-    
+
+    elif command == "open":
+        cli.open_queue()
+
     elif command == "history":
         cli.open_history()
+    
+    elif command == "config":
+        cli.open_config()
     
     elif command in ["help", "--help"]:
         cli.show_help()

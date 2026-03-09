@@ -1,7 +1,7 @@
 import os
 
 from datetime import datetime
-from .paths import HISTORY_FILE, QUEUE_FILE
+from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
 
 def add(word):
@@ -85,6 +85,16 @@ def open_history():
     else:
         os.system(f"xdg-open {path}")
 
+
+def open_config():
+    path = str(CONFIG_FILE)
+
+    if os.name == "nt":
+        os.startfile(path)
+    else:
+        os.system(f"xdg-open {path}")
+
+
 def show_help():
     print("""
 Anki CLI - Gerenciador de fila e criação rápida de flashcards
@@ -101,6 +111,7 @@ Anki CLI - Gerenciador de fila e criação rápida de flashcards
         clear             Limpa toda a fila
         open              Abre o arquivo (queue.txt)
         history           Abre o histórico (history.txt)
+        config            Abre o arquivo de configuração (config.txt)
         process           Processa a fila e gera os flashcards
         help              Mostra esta mensagem de ajuda
 
