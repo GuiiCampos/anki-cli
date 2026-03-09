@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
+from .anki_connect import add_card
+from .config import load_config
 
 def add(word):
     add_line(word)
@@ -151,6 +153,9 @@ def save_history(word, translation, card_type, example):
 def process():
     queue = get_queue()
 
+    config = load_config()
+    deck = config["deck"]
+
     if not queue:
         print("Queue is empty.")
         return
@@ -166,6 +171,18 @@ def process():
         word, translation, card_type, example = complete_fields(
             word, translation, card_type, example
         )
+        
+##enviando para o anki
+        parts = line.strip().split("|")
+        front = parts[0]
+        back = parts[1]
+        context = parts[3] if len(parts) > 2 else ""
+
+        if context:
+            front = front + "\n\n" + context
+
+        add_card(deck, front, back)
+##enviando para o anki
 
         save_history(word, translation, card_type, example)
 
