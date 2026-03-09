@@ -1,0 +1,2 @@
+@echo off
+python C:\Users\guica\Downloads\Projetos\ANKICLI\anki-cli\src\main.py %*

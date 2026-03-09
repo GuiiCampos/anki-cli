@@ -1,2 +1,4 @@
 deck=English
 model=Basic
+context_model=Basic
+tag=vocab
