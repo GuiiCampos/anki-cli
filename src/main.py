@@ -2,10 +2,14 @@ import sys
 
 from anki_cli.paths import ensure_files, ensure_config
 from anki_cli import cli
+from anki_cli.anki_connect import invoke
+
 
 def main():
     ensure_config()
     ensure_files()
+
+    print(invoke("deckNames"))
 
     if len(sys.argv) < 2:
         cli.show_help()
