@@ -68,26 +68,13 @@ def edit(index):
         print("Item updated.")
 
 
-def open_queue():
-    path = str(QUEUE_FILE)
-
-    if os.name == "nt":
-        os.startfile(path)
-    else:
-        os.system(f"xdg-open {path}")
-
-
-def open_history():
-    path = str(HISTORY_FILE)
-
-    if os.name == "nt":
-        os.startfile(path)
-    else:
-        os.system(f"xdg-open {path}")
-
-
-def open_config():
-    path = str(CONFIG_FILE)
+def open_one_dir(value):
+    if value == 1:
+        path = str(QUEUE_FILE)
+    elif value == 2:
+        path = str(HISTORY_FILE) 
+    elif value == 3:
+        path = str(CONFIG_FILE)
 
     if os.name == "nt":
         os.startfile(path)

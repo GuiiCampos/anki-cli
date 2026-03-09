@@ -36,13 +36,13 @@ def main():
         cli.process()
 
     elif command == "open":
-        cli.open_queue()
+        cli.open_one_dir(1)
 
     elif command == "history":
-        cli.open_history()
+        cli.open_one_dir(2)
     
     elif command == "config":
-        cli.open_config()
+        cli.open_one_dir(3)
     
     elif command in ["help", "--help"]:
         cli.show_help()
