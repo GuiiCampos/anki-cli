@@ -1,7 +1,7 @@
 from .paths import CONFIG_FILE
 
 DEFAULT_CONFIG = {
-    "deck": "Default",
+    "deck": "English",
     "model": "Basic",
     "context_model": "Basic",
     "tag": "vocab"
