@@ -8,12 +8,7 @@ def main():
     ensure_files()
 
     if len(sys.argv) < 2:
-        print("Commands:")
-        print(" add WORD")
-        print(" addcard")
-        print(" list")
-        print(" remove INDEX")
-        print(" clear")
+        cli.show_help()
         return
 
     command = sys.argv[1]
@@ -44,6 +39,9 @@ def main():
     
     elif command == "history":
         cli.open_history()
+    
+    elif command in ["help", "--help"]:
+        cli.show_help()
 
     elif command == "clear":
         cli.clear()

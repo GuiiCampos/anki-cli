@@ -85,11 +85,34 @@ def open_history():
     else:
         os.system(f"xdg-open {path}")
 
+def show_help():
+    print("""
+Anki CLI - Gerenciador de fila e criação rápida de flashcards
+
+    USO:
+        anki [COMMANDS] [ARGUMENTS]
+
+    COMMANDS:
+        add <word>        Adiciona uma palavra rapidamente à fila
+        addcard           Criação interativa de cartões
+        list              Exibe os itens da fila
+        edit <index>      Edita um item específico da fila
+        remove <index>    Remove um item da fila
+        clear             Limpa toda a fila
+        open              Abre o arquivo (queue.txt)
+        history           Abre o histórico (history.txt)
+        process           Processa a fila e gera os flashcards
+        help              Mostra esta mensagem de ajuda
+
+    Exemplos:
+        anki add hold
+        anki edit 2
+""")
+
 
 def clear():
     clear_queue()
     print("Queue cleared")
-
 
 ## Sobre a lógica envolvendo o process ->
 
