@@ -41,6 +41,9 @@ def main():
     
     elif command == "process":
         cli.process()
+    
+    elif command == "history":
+        cli.open_history()
 
     elif command == "clear":
         cli.clear()

@@ -1,8 +1,7 @@
 import os
-from .paths import QUEUE_FILE
 
 from datetime import datetime
-from .paths import HISTORY_FILE
+from .paths import HISTORY_FILE, QUEUE_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
 
 def add(word):
@@ -71,6 +70,15 @@ def edit(index):
 
 def open_queue():
     path = str(QUEUE_FILE)
+
+    if os.name == "nt":
+        os.startfile(path)
+    else:
+        os.system(f"xdg-open {path}")
+
+
+def open_history():
+    path = str(HISTORY_FILE)
 
     if os.name == "nt":
         os.startfile(path)
