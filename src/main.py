@@ -1,9 +1,10 @@
 import sys
 
-from anki_cli.paths import ensure_files
+from anki_cli.paths import ensure_files, ensure_config
 from anki_cli import cli
 
 def main():
+    ensure_config()
     ensure_files()
 
     if len(sys.argv) < 2:

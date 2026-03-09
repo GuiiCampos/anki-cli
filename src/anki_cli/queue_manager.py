@@ -1,6 +1,5 @@
 from .paths import QUEUE_FILE
 
-
 def add_line(line):
     with open(QUEUE_FILE, "a", encoding="utf-8") as f:
         f.write(line + "\n")
