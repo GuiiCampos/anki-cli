@@ -2,6 +2,7 @@ import sys
 
 from anki_cli.paths import ensure_files, ensure_config
 from anki_cli import cli
+from anki_cli.anki_connect import AnkiConnectionError
 
 def main():
     ensure_config()
@@ -13,6 +14,12 @@ def main():
 
     command = sys.argv[1]
 
+    try:
+        run(command)
+    except AnkiConnectionError as e:
+        print(f"Error: {e}")
+
+def run(command):
     if command == "add":
         cli.add(sys.argv[2])
 
