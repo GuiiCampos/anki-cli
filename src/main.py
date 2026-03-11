@@ -35,13 +35,13 @@ def main():
         cli.process()
 
     elif command == "open":
-        cli.open_one_dir(1)
+        cli.open_one_dir("queue")
 
     elif command == "history":
-        cli.open_one_dir(2)
+        cli.open_one_dir("history")
     
     elif command == "config":
-        cli.open_one_dir(3)
+        cli.open_one_dir("config")
 
     elif command == "change-deck":
         cli.change_deck()

@@ -71,13 +71,18 @@ def edit(index):
 
 
 def open_one_dir(value):
-    if value == 1:
-        path = str(QUEUE_FILE)
-    elif value == 2:
-        path = str(HISTORY_FILE) 
-    elif value == 3:
-        path = str(CONFIG_FILE)
+    paths = {
+        "queue": str(QUEUE_FILE),
+        "history": str(HISTORY_FILE),
+        "config": str(CONFIG_FILE),
+    }
 
+    path = paths.get(value)
+    
+    if not path:
+        print(f"Unknown file: {value}")
+        return
+    
     if os.name == "nt":
         os.startfile(path)
     else:
@@ -176,14 +181,16 @@ def process():
         if card_type == "t":
             front = word
             back = translation
+            model = config["model"]
         elif card_type == "c":
             front = f"{example}<br><br>What does '{word}' mean?"
             back = translation
+            model = config["context_model"]
         else:
             print(f"Unknown card type: {card_type}")
             continue
 
-        add_card(deck, front, back)
+        add_card(deck, front, back, model)
         save_history(word, translation, card_type, example)
         print("Saved.")
     

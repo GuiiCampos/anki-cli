@@ -12,15 +12,14 @@ def invoke(action, params=None):
     }
 
     response = requests.post(ANKI_URL, json=payload)
-
     return response.json()
 
-def add_card(deck, front, back):
+def add_card(deck, front, back, model="Basic"):
 
     params = {
         "note": {
             "deckName": deck,
-            "modelName": "Basic",
+            "modelName": model,
             "fields": {
                 "Front": front,
                 "Back": back
@@ -28,5 +27,4 @@ def add_card(deck, front, back):
             "tags": ["anki-cli"]
         }
     }
-
     return invoke("addNote", params)
