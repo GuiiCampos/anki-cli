@@ -5,13 +5,14 @@ BASE_DIR = Path.home() / ".anki-cli"
 
 QUEUE_FILE = BASE_DIR / "queue.txt"
 HISTORY_FILE = BASE_DIR / "history.txt"
+DECKS_FILE = BASE_DIR / "decks.txt"
 CONFIG_FILE = BASE_DIR / "config.txt"
 
 
 def ensure_files():
     BASE_DIR.mkdir(exist_ok=True)
 
-    for file in [QUEUE_FILE, HISTORY_FILE]:
+    for file in [QUEUE_FILE, HISTORY_FILE, DECKS_FILE]:
         if not file.exists():
             file.touch()
 

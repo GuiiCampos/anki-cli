@@ -3,7 +3,6 @@ import sys
 from anki_cli.paths import ensure_files, ensure_config
 from anki_cli import cli
 
-
 def main():
     ensure_config()
     ensure_files()
@@ -43,7 +42,10 @@ def main():
     
     elif command == "config":
         cli.open_one_dir(3)
-    
+
+    elif command == "change-deck":
+        cli.change_deck()
+
     elif command in ["help", "--help"]:
         cli.show_help()
 

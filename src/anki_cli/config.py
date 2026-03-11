@@ -31,3 +31,12 @@ def load_config():
             config[key.strip()] = value.strip()
 
     return config
+
+
+def save_config(config):
+
+    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+
+        for key in DEFAULT_CONFIG:
+            value = config.get(key, DEFAULT_CONFIG[key])
+            f.write(f"{key}={value}\n")

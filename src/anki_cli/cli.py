@@ -1,10 +1,10 @@
 import os
 
 from datetime import datetime
-from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
+from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE, DECKS_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
 from .anki_connect import add_card
-from .config import load_config
+from .config import load_config, save_config
 
 def add(word):
     add_line(word)
@@ -102,6 +102,7 @@ Anki CLI - Gerenciador de fila e criação rápida de flashcards
         history           Abre o histórico (history.txt)
         config            Abre o arquivo de configuração (config.txt)
         process           Processa a fila e gera os flashcards
+        change-deck       Muda o deck usado para enviar os cards        
         help              Mostra esta mensagem de ajuda
 
     Exemplos:
@@ -188,3 +189,31 @@ def process():
     
     clear_queue()
     print("\nQueue cleared.")
+
+
+def change_deck():
+    decks_file = DECKS_FILE
+
+    with open(decks_file, "r", encoding="utf-8") as f:
+        decks = [line.strip() for line in f if line.strip()]
+
+    print("\nAvailable decks:\n")
+
+    for i, deck in enumerate(decks, 1):
+        print(f"{i}. {deck}")
+
+    config = load_config()
+    print(f"\nCurrent deck: {config['deck']}")
+
+    choice = input("\nSelect deck number: ")
+
+    try:
+        selected = decks[int(choice) - 1]
+    except:
+        print("Invalid option.")
+        return
+ 
+    config["deck"] = selected
+    save_config(config)
+
+    print(f"\nDeck changed to: {selected}")
