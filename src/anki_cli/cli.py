@@ -34,10 +34,6 @@ def list_queue():
         print(f"{i}  {line}")
 
 
-def remove(index):
-    remove_item(index)
-
-
 def edit(index):
     lines = get_queue()
 
@@ -89,36 +85,40 @@ def open_one_dir(value):
         os.system(f"xdg-open {path}")
 
 
-def show_help():
-    print("""
-Anki CLI - Gerenciador de fila e criação rápida de flashcards
-
-    USO:
-        anki [COMMANDS] [ARGUMENTS]
-
-    COMMANDS:
-        add <word>        Adiciona uma palavra rapidamente à fila
-        addcard           Criação interativa de cartões
-        list              Exibe os itens da fila
-        edit <index>      Edita um item específico da fila
-        remove <index>    Remove um item da fila
-        clear             Limpa toda a fila
-        open              Abre o arquivo (queue.txt)
-        history           Abre o histórico (history.txt)
-        config            Abre o arquivo de configuração (config.txt)
-        process           Processa a fila e gera os flashcards
-        change-deck       Muda o deck usado para enviar os cards        
-        help              Mostra esta mensagem de ajuda
-
-    Exemplos:
-        anki add hold
-        anki edit 2
-""")
+def remove(index):
+    remove_item(index)
 
 
 def clear():
     clear_queue()
     print("Queue cleared")
+
+
+def change_deck():
+    decks = get_decks()
+
+    if not decks:
+        print("No decks found. Is Anki open?")
+        return
+    
+    print("\nAvailable decks:\n")
+    for i, deck in enumerate(decks, 1):
+        print(f"{i}. {deck}")
+
+    config = load_config()
+    print(f"\nCurrent deck: {config['deck']}")
+
+    choice = input("\nSelect deck number: ").strip()
+
+    try:
+        selected = decks[int(choice) - 1]
+    except:
+        print("Invalid option.")
+        return
+ 
+    config["deck"] = selected
+    save_config(config)
+    print(f"\nDeck changed to: {selected}")
 
 ## Sobre a lógica envolvendo o process ->
 
@@ -156,11 +156,37 @@ def save_history(word, translation, card_type, example):
         f.write(line + "\n")
 
 
+def build_card(word, translation, card_type, example, config):
+    if card_type == "t":
+        return word, translation, config["model"]
+    elif card_type == "c":
+        front = f"{example}<br><br>What does '{word}' mean?"
+        return front, translation, config["context_model"]
+    return None, None, None
+
+
+def process_item(line, config):
+    word, translation, card_type, example = parse_line(line)
+
+    print(f"\nWord: {word}")
+
+    word, translation, card_type, example = complete_fields(word, translation, card_type, example)
+
+    front, back, model = build_card(word, translation, card_type, example, config)
+
+    if front is None:
+        print(f"Unknown card type: {card_type}")
+        return False
+
+    add_card(config["deck"], front, back, model)
+    save_history(word, translation, card_type, example)
+    print("Saved.")
+    return True
+
+
 def process():
     queue = get_queue()
-
     config = load_config()
-    deck = config["deck"]
 
     if not queue:
         print("Queue is empty.")
@@ -169,57 +195,35 @@ def process():
     print(f"Processing {len(queue)} items\n")
 
     for line in queue:
+        process_item(line, config)
 
-        word, translation, card_type, example = parse_line(line)
-
-        print(f"\nWord: {word}")
-
-        word, translation, card_type, example = complete_fields(
-            word, translation, card_type, example
-        )
-        
-        if card_type == "t":
-            front = word
-            back = translation
-            model = config["model"]
-        elif card_type == "c":
-            front = f"{example}<br><br>What does '{word}' mean?"
-            back = translation
-            model = config["context_model"]
-        else:
-            print(f"Unknown card type: {card_type}")
-            continue
-
-        add_card(deck, front, back, model)
-        save_history(word, translation, card_type, example)
-        print("Saved.")
-    
     clear_queue()
     print("\nQueue cleared.")
 
+##Fim da lógica do process
 
-def change_deck():
-    decks = get_decks()
+def show_help():
+    print("""
+Anki CLI - Gerenciador de fila e criação rápida de flashcards
 
-    if not decks:
-        print("No decks found. Is Anki open?")
-        return
-    
-    print("\nAvailable decks:\n")
-    for i, deck in enumerate(decks, 1):
-        print(f"{i}. {deck}")
+    USO:
+        anki [COMMANDS] [ARGUMENTS]
 
-    config = load_config()
-    print(f"\nCurrent deck: {config['deck']}")
+    COMMANDS:
+        add <word>        Adiciona uma palavra rapidamente à fila
+        addcard           Criação interativa de cartões
+        list              Exibe os itens da fila
+        edit <index>      Edita um item específico da fila
+        remove <index>    Remove um item da fila
+        clear             Limpa toda a fila
+        open              Abre o arquivo (queue.txt)
+        history           Abre o histórico (history.txt)
+        config            Abre o arquivo de configuração (config.txt)
+        process           Processa a fila e gera os flashcards
+        change-deck       Muda o deck usado para enviar os cards        
+        help              Mostra esta mensagem de ajuda
 
-    choice = input("\nSelect deck number: ").strip()
-
-    try:
-        selected = decks[int(choice) - 1]
-    except:
-        print("Invalid option.")
-        return
- 
-    config["deck"] = selected
-    save_config(config)
-    print(f"\nDeck changed to: {selected}")
+    Exemplos:
+        anki add hold
+        anki edit 2
+""")
