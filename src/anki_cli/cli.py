@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
-from .anki_connect import add_card, get_decks, create_deck
+from .anki_connect import add_card, get_decks, create_deck, is_connected, get_deck_card_count
 from .config import load_config, save_config
 
 def add(word):
@@ -145,6 +145,25 @@ def deck_new():
     else:
         print(f"Deck '{name}' created.")
 
+
+def status():
+    config = load_config()
+    deck = config["deck"]
+    queue = get_queue()
+
+    print("\n--- Anki CLI Status ---\n")
+    print(f"Current deck:  {deck}")
+    print(f"Queue items:   {len(queue)}")
+
+    if is_connected():
+        count = get_deck_card_count(deck)
+        print(f"Anki:          Online")
+        print(f"Cards in deck: {count}")
+    else:
+        print(f"Anki:          Offline")
+
+    print()
+
 ## Sobre a lógica envolvendo o process ->
 
 def parse_line(line):
@@ -245,10 +264,13 @@ Anki CLI - Gerenciador de fila e criação rápida de flashcards
         history           Abre o histórico (history.txt)
         config            Abre o arquivo de configuração (config.txt)
         process           Processa a fila e gera os flashcards
-        change-deck       Muda o deck usado para enviar os cards        
+        status            Exibe o deck atual, itens na fila e status do Anki
+        deck change       Lista os decks do Anki e troca o atual        
+        deck new          Cria um novo deck no Anki
         help              Mostra esta mensagem de ajuda
 
     Exemplos:
         anki add hold
-        anki edit 2
+        anki deck change
+        anki deck new
 """)

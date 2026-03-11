@@ -41,6 +41,9 @@ def run(command):
     elif command == "process":
         cli.process()
 
+    elif command == "status":
+        cli.status()
+
     elif command == "open":
         cli.open_one_dir("queue")
 
@@ -57,7 +60,7 @@ def run(command):
         
         subcommand = sys.argv[2]
         if subcommand == "change":
-            cli.deck_change()
+            cli.change_deck()
         elif subcommand == "new":
             cli.deck_new()
         else:

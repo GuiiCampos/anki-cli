@@ -47,3 +47,17 @@ def get_decks():
 def create_deck(name):
     result = invoke("createDeck", {"deck": name})
     return result.get("result")
+
+
+def is_connected():
+    try:
+        invoke("version")
+        return True
+    except AnkiConnectionError:
+        return False
+
+
+def get_deck_card_count(deck):
+    result = invoke("findCards", {"query": f"deck:{deck}"})
+    cards = result.get("result", [])
+    return len(cards)
