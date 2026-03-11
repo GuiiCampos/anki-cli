@@ -33,3 +33,8 @@ def add_card(deck, front, back, model="Basic"):
 def get_decks():
     result = invoke("deckNames")
     return result.get("result", [])
+
+
+def create_deck(name):
+    result = invoke("createDeck", {"deck": name})
+    return result.get("result")

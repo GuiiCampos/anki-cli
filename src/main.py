@@ -43,8 +43,18 @@ def main():
     elif command == "config":
         cli.open_one_dir("config")
 
-    elif command == "change-deck":
-        cli.change_deck()
+    elif command == "deck":
+        if len(sys.argv) < 3:
+            print("Usage: anki deck <change|new>")
+            return
+        
+        subcommand = sys.argv[2]
+        if subcommand == "change":
+            cli.deck_change()
+        elif subcommand == "new":
+            cli.deck_new()
+        else:
+            print(f"Unknown subcommand: {subcommand}")
 
     elif command in ["help", "--help"]:
         cli.show_help()

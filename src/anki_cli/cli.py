@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
-from .anki_connect import add_card, get_decks
+from .anki_connect import add_card, get_decks, create_deck
 from .config import load_config, save_config
 
 def add(word):
@@ -119,6 +119,31 @@ def change_deck():
     config["deck"] = selected
     save_config(config)
     print(f"\nDeck changed to: {selected}")
+
+
+def deck_new():
+    name = input("New deck name: ").strip()
+
+    if not name:
+        print("Deck name cannot be empty.")
+        return
+
+    result = create_deck(name)
+
+    if result is None:
+        print("Failed to create deck. Is Anki open?")
+        return
+
+    config = load_config()
+    
+    set_as_current = input(f"Set '{name}' as current deck? (y/n): ").strip().lower()
+    
+    if set_as_current == "y":
+        config["deck"] = name
+        save_config(config)
+        print(f"Deck '{name}' created and set as current.")
+    else:
+        print(f"Deck '{name}' created.")
 
 ## Sobre a lógica envolvendo o process ->
 
