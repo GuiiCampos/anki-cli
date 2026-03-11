@@ -5,14 +5,13 @@ BASE_DIR = Path.home() / ".anki-cli"
 
 QUEUE_FILE = BASE_DIR / "queue.txt"
 HISTORY_FILE = BASE_DIR / "history.txt"
-DECKS_FILE = BASE_DIR / "decks.txt"
 CONFIG_FILE = BASE_DIR / "config.txt"
 
 
 def ensure_files():
     BASE_DIR.mkdir(exist_ok=True)
 
-    for file in [QUEUE_FILE, HISTORY_FILE, DECKS_FILE]:
+    for file in [QUEUE_FILE, HISTORY_FILE]:
         if not file.exists():
             file.touch()
 
@@ -20,6 +19,5 @@ def ensure_files():
 EXAMPLE_CONFIG = Path(__file__).resolve().parents[2] / "config.example.txt"
 
 def ensure_config():
-
     if not CONFIG_FILE.exists():
         shutil.copy(EXAMPLE_CONFIG, CONFIG_FILE)

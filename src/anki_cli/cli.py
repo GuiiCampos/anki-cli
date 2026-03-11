@@ -1,9 +1,9 @@
 import os
 
 from datetime import datetime
-from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE, DECKS_FILE
+from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
-from .anki_connect import add_card
+from .anki_connect import add_card, get_decks
 from .config import load_config, save_config
 
 def add(word):
@@ -199,20 +199,20 @@ def process():
 
 
 def change_deck():
-    decks_file = DECKS_FILE
+    decks = get_decks()
 
-    with open(decks_file, "r", encoding="utf-8") as f:
-        decks = [line.strip() for line in f if line.strip()]
-
+    if not decks:
+        print("No decks found. Is Anki open?")
+        return
+    
     print("\nAvailable decks:\n")
-
     for i, deck in enumerate(decks, 1):
         print(f"{i}. {deck}")
 
     config = load_config()
     print(f"\nCurrent deck: {config['deck']}")
 
-    choice = input("\nSelect deck number: ")
+    choice = input("\nSelect deck number: ").strip()
 
     try:
         selected = decks[int(choice) - 1]
@@ -222,5 +222,4 @@ def change_deck():
  
     config["deck"] = selected
     save_config(config)
-
     print(f"\nDeck changed to: {selected}")

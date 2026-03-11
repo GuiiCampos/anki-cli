@@ -28,3 +28,8 @@ def add_card(deck, front, back, model="Basic"):
         }
     }
     return invoke("addNote", params)
+
+
+def get_decks():
+    result = invoke("deckNames")
+    return result.get("result", [])
