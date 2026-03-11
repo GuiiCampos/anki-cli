@@ -172,22 +172,19 @@ def process():
             word, translation, card_type, example
         )
         
-##enviando para o anki
-        parts = line.strip().split("|")
-        front = parts[0]
-        back = parts[1]
-        context = parts[3] if len(parts) > 2 else ""
-
-        if context:
-            front = front + "\n\n" + context
+        if card_type == "t":
+            front = word
+            back = translation
+        elif card_type == "c":
+            front = f"{example}<br><br>What does '{word}' mean?"
+            back = translation
+        else:
+            print(f"Unknown card type: {card_type}")
+            continue
 
         add_card(deck, front, back)
-##enviando para o anki
-
         save_history(word, translation, card_type, example)
-
         print("Saved.")
-
+    
     clear_queue()
-
     print("\nQueue cleared.")
