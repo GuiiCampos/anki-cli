@@ -6,6 +6,9 @@ ANKI_URL = "http://127.0.0.1:8765"
 class AnkiConnectionError(Exception):
     pass
 
+class AnkiDuplicateError(Exception):
+    pass
+
 
 def invoke(action, params=None):
     payload = {
@@ -36,7 +39,11 @@ def add_card(deck, front, back, model="Basic"):
             "tags": ["anki-cli"]
         }
     }
-    return invoke("addNote", params)
+    result = invoke("addNote", params)
+    
+    if result.get("error") is not None:
+        raise AnkiDuplicateError(f"Duplicate card: '{front}'")
+    return result
 
 
 def get_decks():

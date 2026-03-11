@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from .paths import HISTORY_FILE, QUEUE_FILE, CONFIG_FILE
 from .queue_manager import add_line, get_queue, remove_item, clear_queue, update_item
-from .anki_connect import add_card, get_decks, create_deck, is_connected, get_deck_card_count
+from .anki_connect import add_card, get_decks, create_deck, is_connected, get_deck_card_count, AnkiDuplicateError
 from .config import load_config, save_config
 
 def add(word):
@@ -221,10 +221,15 @@ def process_item(line, config):
     if front is None:
         print(f"Unknown card type: {card_type}")
         return False
+    
+    try:
+        add_card(config["deck"], front, back, model)
+        save_history(word, translation, card_type, example)
+        print("Saved.")
+    except AnkiDuplicateError as e:
+        print(f"Skipped — {e}")
+        return False
 
-    add_card(config["deck"], front, back, model)
-    save_history(word, translation, card_type, example)
-    print("Saved.")
     return True
 
 
