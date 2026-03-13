@@ -223,7 +223,14 @@ def process_item(line, config):
         return False
     
     try:
-        add_card(config["deck"], front, back, model)
+        add_card(
+            config["deck"],
+            front,
+            back,
+            model,
+            config["field_front"],
+            config["field_back"]
+        )
         save_history(word, translation, card_type, example)
         print("Saved.")
     except AnkiDuplicateError as e:

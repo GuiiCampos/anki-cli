@@ -2,7 +2,6 @@ import requests # type: ignore
 
 ANKI_URL = "http://127.0.0.1:8765"
 
-
 class AnkiConnectionError(Exception):
     pass
 
@@ -27,22 +26,27 @@ def invoke(action, params=None):
         raise AnkiConnectionError(f"Anki request failed: {e}")
     
 
-def add_card(deck, front, back, model="Basic"):
+def add_card(deck, front, back, model, field_front, field_back):
     params = {
         "note": {
             "deckName": deck,
             "modelName": model,
             "fields": {
-                "Front": front,
-                "Back": back
+                field_front: front,
+                field_back: back
             },
             "tags": ["anki-cli"]
         }
     }
+
     result = invoke("addNote", params)
+    error = result.get("error")
     
-    if result.get("error") is not None:
-        raise AnkiDuplicateError(f"Duplicate card: '{front}'")
+    if error is not None:
+        if "duplicate" in error.lower():
+            raise AnkiDuplicateError(f"Duplicate card: '{front}'")
+        raise AnkiConnectionError(f"Failed to add card: {error}")
+
     return result
 
 
@@ -68,3 +72,19 @@ def get_deck_card_count(deck):
     result = invoke("findCards", {"query": f"deck:{deck}"})
     cards = result.get("result", [])
     return len(cards)
+
+
+def get_model_fields(model_name):
+    result = invoke("modelFieldNames", {"modelName": model_name})
+    return result.get("result", [])
+
+
+def detect_basic_model():
+    result = invoke("modelNames")
+    models = result.get("result", [])
+
+    for name in ["Basic", "Básico"]:
+        if name in models:
+            return name
+
+    return None

@@ -1,11 +1,18 @@
-import shutil
 from pathlib import Path
 
 BASE_DIR = Path.home() / ".anki-cli"
-
 QUEUE_FILE = BASE_DIR / "queue.txt"
 HISTORY_FILE = BASE_DIR / "history.txt"
 CONFIG_FILE = BASE_DIR / "config.txt"
+
+DEFAULT_CONFIG = {
+    "deck": "English",
+    "model": "Basic",
+    "context_model": "Basic",
+    "tag": "vocab",
+    "field_front": "",
+    "field_back": ""
+}
 
 
 def ensure_files():
@@ -16,8 +23,11 @@ def ensure_files():
             file.touch()
 
 
-EXAMPLE_CONFIG = Path(__file__).resolve().parents[2] / "config.example.txt"
-
 def ensure_config():
+    BASE_DIR.mkdir(exist_ok=True)
+
     if not CONFIG_FILE.exists():
-        shutil.copy(EXAMPLE_CONFIG, CONFIG_FILE)
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            f.write("# Anki CLI configuration\n\n")
+            for key, value in DEFAULT_CONFIG.items():
+                f.write(f"{key}={value}\n")
