@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/anki_cli/__init__.py
+src/anki_cli/anki_connect.py
+src/anki_cli/cli.py
+src/anki_cli/config.py
+src/anki_cli/main.py
+src/anki_cli/paths.py
+src/anki_cli.egg-info/PKG-INFO
+src/anki_cli.egg-info/SOURCES.txt
+src/anki_cli.egg-info/dependency_links.txt
+src/anki_cli.egg-info/entry_points.txt
+src/anki_cli.egg-info/requires.txt
+src/anki_cli.egg-info/top_level.txt

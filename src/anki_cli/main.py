@@ -1,8 +1,8 @@
 import sys
 
-from anki_cli.paths import ensure_files, ensure_config
-from anki_cli import cli
-from anki_cli.anki_connect import AnkiConnectionError
+from .paths import ensure_files, ensure_config
+from . import cli
+from .anki_connect import AnkiConnectionError
 
 def main():
     ensure_config()
