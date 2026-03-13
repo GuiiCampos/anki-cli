@@ -19,7 +19,6 @@ CLI para gerenciar e enviar flashcards ao Anki em lote, sem precisar digitar pal
 ```bash
 git clone https://github.com/GuiiCampos/anki-cli.git
 cd anki-cli
-git checkout linux-support
 pip3 install -e . --break-system-packages
 ```
 
