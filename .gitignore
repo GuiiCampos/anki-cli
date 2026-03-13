@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 .env
 anki-cli.egg-info
+anki.egg-info
