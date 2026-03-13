@@ -27,6 +27,13 @@ pip3 install -e . --break-system-packages
 > sudo apt install python3-pip
 > ```
 
+> Se após a instalação o comando `anki-cli` não for reconhecido, adicione o diretório local ao PATH:
+> ```bash
+> echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+> source ~/.zshrc
+> ```
+> Se usar bash em vez de zsh, troque `.zshrc` por `.bashrc`.
+
 ### Windows
 
 ```bash
